@@ -8,8 +8,8 @@ function AddProdukComponent() {
     const [stok, setStok] = useState("");
     const [hargaBeli, setHargaBeli] = useState("");
     const [hargaJual, setHargaJual] = useState("");
-    const [status, setStatus] = useState("Tersedia"); //default status
-    const [error, setError] = usestate(null);
+    const [status, setStatus] = useState("Tersedia");
+    const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
 
     const handleSubmit = async (e) => {
@@ -18,18 +18,21 @@ function AddProdukComponent() {
         setSuccessMessage(null);
 
         try {
-            //mengirim data produk ke API
+            //React menampung input dari form:
             const newProduct = {
                 nama_produk: namaProduk,
                 jenis_produk: jenisProduk,
-                stok: stok,
-                harga_beli: hargaBeli,
-                harga_jual: hargaJual,
-                status: status,
+                stok: Number(stok),
+                harga_beli: Number(hargaBeli),
+                harga_jual: Number(hargaJual),
+                status: status === "Tersedia" || status === "Aktif" ? 1 : 0, // ✅ kirim angka ke API
             };
-            await addProduk(newProduct); //menggunakan fungsi yang akan anda buat di ProdukService
+
+            // Lalu React kirim ke API:
+            await addProduk(newProduct);
             setSuccessMessage("Produk berhasil ditambahkan!");
-            //reset form setelah berhasil
+
+            // reset form
             setNamaProduk("");
             setJenisProduk("");
             setStok("");
@@ -38,17 +41,19 @@ function AddProdukComponent() {
             setStatus("Tersedia");
         } catch (error) {
             console.error("Error adding product:", error);
-            setError("gagal menambahkan produk. Silahkan coba lagi.");
+            setError("Gagal menambahkan produk. Silakan coba lagi.");
         }
     };
 
     return (
         <div className="container mt-4">
             <h2>Tambah Produk</h2>
-            {error && <div className="alert-danger">{error}</div>}
+
+            {error && <div className="alert alert-danger">{error}</div>}
             {successMessage && (
-                <div className="alert alert success">{successMessage}</div>
+                <div className="alert alert-success">{successMessage}</div>
             )}
+
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="namaProduk" className="form-label">
@@ -63,6 +68,7 @@ function AddProdukComponent() {
                         required
                     />
                 </div>
+
                 <div className="mb-3">
                     <label htmlFor="jenisProduk" className="form-label">
                         Jenis Produk
@@ -76,6 +82,7 @@ function AddProdukComponent() {
                         required
                     />
                 </div>
+
                 <div className="mb-3">
                     <label htmlFor="stok" className="form-label">
                         Stok
@@ -89,6 +96,7 @@ function AddProdukComponent() {
                         required
                     />
                 </div>
+
                 <div className="mb-3">
                     <label htmlFor="hargaBeli" className="form-label">
                         Harga Beli
@@ -102,6 +110,7 @@ function AddProdukComponent() {
                         required
                     />
                 </div>
+
                 <div className="mb-3">
                     <label htmlFor="hargaJual" className="form-label">
                         Harga Jual
@@ -115,6 +124,7 @@ function AddProdukComponent() {
                         required
                     />
                 </div>
+
                 <div className="mb-3">
                     <label htmlFor="status" className="form-label">
                         Status
@@ -129,12 +139,14 @@ function AddProdukComponent() {
                         <option value="Tidak Tersedia">Tidak Tersedia</option>
                     </select>
                 </div>
+
                 <button type="submit" className="btn btn-primary">
                     Tambah Produk
                 </button>
-                <link to="/list-produk" className="btn btn-secondary ms-2">
+
+                <Link to="/list-produk" className="btn btn-secondary ms-2">
                     Kembali ke List Produk
-                </link>
+                </Link>
             </form>
         </div>
     );

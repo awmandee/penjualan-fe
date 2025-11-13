@@ -5,7 +5,7 @@ import FooterComponent from "./components/templates/FooterComponent";
 import AddProdukComponent from "./components/produk/AddProdukComponent";
 //memanggil dari kelas listProdukComponents
 import ListProdukComponent from "./components/produk/ListProdukComponent";
-import "./App.css";
+import UpdateProdukComponent from "./components/produk/UpdateProdukComponent"; // ✅ import baru
 
 function App() {
     return (
@@ -21,6 +21,10 @@ function App() {
                         <Route
                             path="/list-produk"
                             element={<ListProdukComponent />}
+                        />
+                        <Route
+                            path="/edit-produk/:id"
+                            element={<UpdateProdukComponent />}
                         />
                         {/* rute lainnya bisa ditambahkan disini */}
                     </Routes>
